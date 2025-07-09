@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_clarification_wizard_form" model="ir.ui.view">
+        <field name="name">clarification.wizard.form</field>
+        <field name="model">clarification.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Send Clarification">
+                <sheet>
+                    <div>
+                        <field name="clarification_message" placeholder="Enter your message here..."/>
+                    </div>
+                </sheet>
+                <footer>
+                    <button string="Send" type="object" name="send_clarification_email" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

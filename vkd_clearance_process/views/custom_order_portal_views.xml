@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="portal_my_home_helpdesk_ticket" name="Show Tickets" customize_show="True" inherit_id="portal.portal_my_home" priority="50">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="before">
+            <t t-set="portal_service_category_enable" t-value="True"/>
+        </xpath>
+        <div id="portal_service_category" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="icon" t-value="'/helpdesk/static/src/img/tickets.svg'"/>
+                <t t-set="title">Custom Orders</t>
+                <t t-set="text">Follow all your Custom Orders</t>
+                <t t-set="url" t-value="'/my/customOrders'"/>
+                <t t-set="placeholder_count" t-value="'custom_order_count'"/>
+            </t>
+        </div>
+    </template>
+
+    <template id="portal_custom_order" name="Custom Orders">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Custom Order</t>
+            </t>
+            <div t-if="not grouped_custom_orders" class="alert alert-info">
+                There are currently no Orders for your account.
+            </div>
+            <t t-else="">
+                <t t-call="portal.portal_table">
+                    <thead>
+                        <tr>
+                            <th>Custom Order</th>
+                            <th class="text-end" t-if="groupby != 'create_date'">Created on</th>
+                            <th t-if="groupby != 'custom_state'" class="ps-5">State</th>
+                        </tr>
+                    </thead>
+                    <t t-foreach="grouped_custom_orders" t-as="custom_order">
+                        <tbody>
+                            <tr t-if="not groupby =='none'" class="table-light">
+                                <th t-if="groupby == 'custom_state'" colspan="5">
+                                    <span t-field="custom_order[0].custom_state"/>
+                                </th>
+                                <th t-if="groupby == 'create_date'" colspan="5">
+                                    <span t-field="custom_order[0].create_date"/>
+                                </th>
+                            </tr>
+                        </tbody>
+                        <t t-foreach="custom_order" t-as="order">
+                            <tr>
+                                <td class="text-start"><a t-attf-href="/my/customOrder"><small>#</small><t t-out="order.origin"/><span class="ms-2" t-att-title="order.name" t-field="order.name"/></a></td>
+                                <td class="text-end" t-if="groupby != 'create_date'">
+                                    <span t-field="order.create_date" t-options='{"widget": "datetime", "hide_seconds": True}'/>
+                                </td>
+                                <td t-if="groupby != 'custom_state'" class="text-end align-middle lh-1">
+                                    <span t-attf-class="badge rounded-pill fw-normal #{'text-bg-success' if order.custom_state else 'text-bg-primary'}" t-esc="order.custom_state"/>
+                                </td>
+                            </tr>
+                        </t>
+                    </t>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <template id="custom_order_followup" name="Custom Orders">
+        <t t-call="portal.portal_layout">
+            <t t-set="title" t-value="custom_order.name"/>
+            <t t-set="wrapwrap_classes" t-value="'o_portal_bg_dark'"/>
+
+            <t t-set="o_portal_fullwidth_alert">
+                <t t-call="portal.portal_back_in_edit_mode">
+                    <t t-set="backend_url" t-value="'/web#model=custom.order&amp;id=%s&amp;view_type=form' % (custom_order.id)"/>
+                </t>
+            </t>
+
+            <div class="row mt16 o_project_portal_sidebar">
+                <t t-call="portal.portal_record_sidebar">
+                    <t t-set="classes" t-value="'col-lg-3 col-xl-4 d-print-none'"/>
+
+                    <t t-set="entries">
+                        <div class="d-flex flex-column">
+                            <div id="ticket-nav" class="flex-grow-1 p-0" t-ignore="true" role="complementary">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item" id="nav-header">
+                                        <a class="nav-link p-0" href="#card_header">
+                                            Custom Order
+                                        </a>
+                                    </li>
+                                    <li class="nav-item" id="nav-chat">
+                                        <a class="nav-link p-0" href="#ticket_chat">
+                                            History
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div t-if="custom_order.partner_id" class="mt-4">
+                                <div t-attf-class="col-12 col-md-12 {{ 'mt-3' if custom_order.partner_id.name else '' }}" t-if="custom_order.partner_id">
+                                    <h6>
+                                        <small class="text-muted">Customer</small>
+                                    </h6>
+                                    <div class="o_portal_contact_details d-flex flex-column gap-1">
+                                        <div class="d-flex justify-content-start align-items-center gap-2">
+                                            <img class="o_avatar o_portal_contact_img rounded" t-att-src="image_data_uri(custom_order.partner_id.avatar_128)" alt="Contact"/>
+                                            <h6 class="mb-0" t-out="custom_order.partner_id.name"></h6>
+                                        </div>
+                                        <div>
+                                            <a t-attf-href="mailto:{{custom_order.partner_id.email}}" t-if="custom_order.partner_id.email"><div t-field="custom_order.partner_id" t-options='{"widget": "contact", "fields": ["email"]}'/></a>
+                                            <a t-attf-href="tel:{{custom_order.partner_id.phone}}" t-if="custom_order.partner_id.phone"><div t-field="custom_order.partner_id" t-options='{"widget": "contact", "fields": ["phone"]}'/></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+                <div id="ticket_content" class="o_portal_content col-12 col-lg-9 col-xl-8 mt-5 mt-lg-0">
+                    <div id="card">
+                        <div id="card_header" class="container" data-anchor="true">
+                            <div class="row gs-0">
+                                <div class="col-md">
+                                    <h5 class="row justify-content-between">
+                                        <div class="col-md-9 text-truncate">
+                                            <span t-field="custom_order.name" class="h3"/>
+                                            <small class="text-muted"> (#<span t-field="custom_order.origin"/>)</small>
+                                        </div>
+                                        <div class="col col-auto">
+                                            <small class="text-end">Stage:</small>
+                                            <span t-field="custom_order.custom_state" t-attf-class="badge rounded-pill #{'text-bg-info' if custom_order.custom_state else 'text-bg-light bg-200'}" title="Current stage of this ticket"/>
+                                        </div>
+                                    </h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <t t-if="custom_order" t-call="portal.portal_table">
+                        <thead>
+                            <tr class="active">
+                                <th>
+                                    <span class='d-none d-md-inline'>Source Document</span>
+                                </th>
+                                <th class="text-end">Arrived Date</th>
+                                <th class="text-end">Bl Number</th>
+                                <th class="text-end">Status</th>
+                            </tr>
+                        </thead>
+                        <t t-foreach="custom_order" t-as="order">
+                            <tr>
+                                <td><t t-out="order.origin"/></td>
+                                <td class="text-end">
+                                    <span t-field="order.arrived_date" t-options="{'widget': 'date'}"/>
+                                </td>
+                                <td class="text-end">
+                                    <span t-field="order.bl_number"/>
+                                </td>
+                                <td class="text-end"><span t-field="order.custom_state"/></td>
+                            </tr>
+                        </t>
+                    </t>
+                    <p t-else="">There are currently no orders for your account.</p>
+
+                    <hr/>
+                    <div class="o_portal_messages_container" id="ticket_chat" data-anchor="true">
+                        <h3>Communication history</h3>
+                        <t t-call="portal.message_thread">
+                            <t t-set="token" t-value="custom_order.access_token"/>
+                        </t>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

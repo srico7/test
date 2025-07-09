@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_order_form" model="ir.ui.view">
+        <field name="name">sale.order.form.vkd_port_api</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook/page[@name='clearance_doc']//group[@name='doc_details']/field[@name='bl_number']"
+                   position="before">
+                <label for="port_bl_id"/>
+                <div class="o_row">
+                    <field name="port_bl_id"/>
+                    <button name="%(vkd_port_api.action_bl_search)d"
+                        string="Search BL Number"
+                        type="action"
+                        class="btn-secondary"/>
+                </div>
+            </xpath>
+            <xpath expr="//notebook/page[@name='cargo_details']" position="inside">
+                <field name="cargo_ids" widget="one2many">
+                    <tree>
+                        <field name="name"/>
+                        <field name="container_no"/>
+                        <field name="container_type"/>
+                        <field name="cargo_type"/>
+                        <field name="description"/>
+                        <field name="quantity"/>
+                        <field name="cleared_qty"/>
+                        <field name="tallied_qty"/>
+                        <field name="cubic_meter"/>
+                        <field name="gross_weight"/>
+                        <field name="mark_nos"/>
+                    </tree>
+                </field>
+            </xpath>
+            <xpath expr="//notebook/page[@name='cargo_details']" position="after">
+                <page string="Gate Passes" name="gate_pass_details" invisible="is_clearance != True">
+                    <field name="gate_pass_ids" widget="one2many">
+                        <tree>
+                            <field name="name"/>
+                            <field name="approved_by"/>
+                            <field name="approved_date"/>
+                            <field name="r_form_no"/>
+                            <field name="transport_mode"/>
+                            <field name="status"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

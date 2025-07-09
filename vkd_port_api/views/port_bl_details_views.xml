@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="port_bl_details_view_tree" model="ir.ui.view">
+        <field name="name">port.bl.details.view.tree</field>
+        <field name="model">port.bl.details</field>
+        <field name="arch" type="xml">
+            <tree string="Bills of Lading">
+                <field name="bl_number"/>
+                <field name="voyage"/>
+                <field name="created_at"/>
+                <field name="cargo_count"/>
+                <field name="total_volume"/>
+                <field name="consignee_id"/>
+                <field name="hw_payment_status"/>
+                <field name="approved"/>
+                <field name="status"/>
+                <field name="is_clear"/>
+                <field name="do_exp_date"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="port_bl_details_view_form" model="ir.ui.view">
+        <field name="name">port.bl.details.view.form</field>
+        <field name="model">port.bl.details</field>
+        <field name="arch" type="xml">
+            <form string="Bill of Lading">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="bl_number" placeholder="BL Number"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Basic Information">
+                            <field name="bl_type"/>
+                            <field name="voyage"/>
+                            <field name="voyage_id"/>
+                            <field name="document_id"/>
+                            <field name="broker"/>
+                            <field name="shipper"/>
+                            <field name="consignee_id"/>
+                            <field name="mark_nos"/>
+                        </group>
+                        <group string="Status Information">
+                            <field name="approved"/>
+                            <field name="is_clear"/>
+                            <field name="is_sea_to_air"/>
+                            <field name="personal_effects"/>
+                            <field name="open"/>
+                            <field name="transit"/>
+                            <field name="cleared_status"/>
+                            <field name="tallied_status"/>
+                            <field name="hw_payment_status"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Dates">
+                            <field name="created_at"/>
+                            <field name="approved_at"/>
+                            <field name="date_received"/>
+                            <field name="clearing_date"/>
+                            <field name="do_exp_date"/>
+                            <field name="updated_at"/>
+                            <field name="bill_of_lading_date"/>
+                        </group>
+                        <group string="Quantities">
+                            <field name="cargo_count"/>
+                            <field name="total_volume"/>
+                            <field name="tallied_quantity"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Cargo Information">
+                            <field name="cargo_ids">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="container_no"/>
+                                    <field name="container_type"/>
+                                    <field name="cargo_type"/>
+                                    <field name="description"/>
+                                    <field name="quantity"/>
+                                    <field name="cleared_qty"/>
+                                    <field name="tallied_qty"/>
+                                    <field name="cubic_meter"/>
+                                    <field name="gross_weight"/>
+                                    <field name="mark_nos"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Gate Passes">
+                            <field name="gate_pass_ids">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="approved_by"/>
+                                    <field name="approved_date"/>
+                                    <field name="r_form_no"/>
+                                    <field name="transport_mode"/>
+                                    <field name="status"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Additional Information">
+                            <group>
+                                <group string="Port Information">
+                                    <field name="port_of_loading"/>
+                                    <field name="country_of_origin"/>
+                                    <field name="transhipment_port"/>
+                                    <field name="transhipment_port_id"/>
+                                </group>
+                                <group string="System References">
+                                    <field name="file_id"/>
+                                    <field name="profile_version_id"/>
+                                    <field name="profileable_id"/>
+                                    <field name="user_id"/>
+                                    <field name="new_user_id"/>
+                                    <field name="auction_session_shipment_id"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="port_bl_details_view_search" model="ir.ui.view">
+        <field name="name">port.bl.details.view.search</field>
+        <field name="model">port.bl.details</field>
+        <field name="arch" type="xml">
+            <search string="Search Bills of Lading">
+                <field name="bl_number"/>
+                <field name="voyage"/>
+                <field name="broker"/>
+                <field name="consignee_id"/>
+                <field name="mark_nos"/>
+                <separator/>
+                <filter string="Cleared" name="cleared" domain="[('is_clear', '=', True)]"/>
+                <filter string="Not Cleared" name="not_cleared" domain="[('is_clear', '=', False)]"/>
+                <filter string="Sea to Air" name="sea_to_air" domain="[('is_sea_to_air', '=', True)]"/>
+                <filter string="Paid" name="paid" domain="[('hw_payment_status', '=', 'paid')]"/>
+                <separator/>
+                <filter string="Today" name="today" domain="[('created_at', '&gt;=', datetime.datetime.combine(context_today(), datetime.time(0,0,0)))]"/>
+                <filter string="Expiring DO" name="expiring_do" domain="[('do_exp_date', '&gt;=', context_today()), ('do_exp_date', '&lt;=', (context_today() + datetime.timedelta(days=7)).strftime('%Y-%m-%d'))]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Voyage" name="group_voyage" domain="[]" context="{'group_by': 'voyage'}"/>
+                    <filter string="Status" name="group_status" domain="[]" context="{'group_by': 'status'}"/>
+                    <filter string="Payment Status" name="group_payment" domain="[]" context="{'group_by': 'hw_payment_status'}"/>
+                    <filter string="Creation Month" name="group_create_month" domain="[]" context="{'group_by': 'created_at:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_port_bl_details" model="ir.actions.act_window">
+        <field name="name">Bills of Lading</field>
+        <field name="res_model">port.bl.details</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="port_bl_details_view_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Fetch your Bill of Lading From API
+            </p>
+        </field>
+    </record>
+
+    <menuitem
+        id="menu_port_bl_details"
+        name="BL Details"
+        parent="menu_port_api_root"
+        action="action_port_bl_details"
+        sequence="10"/>
+
+</odoo>

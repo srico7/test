@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="delivery_order_view_form" model="ir.ui.view">
+        <field name="name">delivery.order.view.form.inherit.vkd_port_api</field>
+        <field name="model">delivery.order</field>
+        <field name="inherit_id" ref="vkd_clearance_process.delivery_order_view_form"/>
+        <field name="arch" type="xml">
+            <header>
+                <button name="action_status_check" string="Check Status" type="object"
+                            class="btn-primary"/>
+            </header>
+            <field name="arrived_date" position="after">
+                <field name="approved_at"/>
+            </field>
+        </field>
+    </record>
+</odoo>

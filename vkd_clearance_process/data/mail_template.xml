@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--Email template -->
+        <record id="email_template_clarification" model="mail.template">
+            <field name="name">Clarification</field>
+            <field name="model_id" ref="vkd_clearance_process.model_custom_order"/>
+            <field name="email_from">{{ object.user_id.email_formatted }}</field>
+            <field name="email_to">{{ object.partner_id.email_formatted }}</field>
+            <field name="email_cc"></field>
+            <field name="subject">{{ object.name }}</field>
+            <field name="body_html" type="html">
+                <div>
+                    <p>Dear <t t-out="object.partner_id.name"/>,</p>
+                    <p>Please provide missing information mentioned in below...!</p>
+                    <p>
+                        Please Enter Missing Document Details in here....!
+                    </p>
+                    <p>Please log in to the customer portal to see the status.</p>
+                    <p>Thank you!</p>
+                    <p>Best regards,<br/><t t-out="object.user_id.name"/></p>
+                </div>
+            </field>
+            <field name="lang">{object.partner_id.lang}</field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+    </data>
+</odoo>

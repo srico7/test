@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="main_menu_clearance_job" name="Clearance" groups="vkd_clearance_process.group_clearance_manager"
+              web_icon="vkd_clearance_process,static/description/icon.png"/>
+    <menuitem id="menu_clearance_sale_process" name="Orders" groups="base.group_user"
+              parent="vkd_clearance_process.main_menu_clearance_job" action="action_view_clearance_sale_order" sequence="1"/>
+    <menuitem id="menu_clearance_process" name="Clearance Process" groups="base.group_user"
+              parent="vkd_clearance_process.main_menu_clearance_job" action="action_view_clearance_order" sequence="2"/>
+    <menuitem id="menu_do_process" name="DO Process" groups="base.group_user"
+              parent="vkd_clearance_process.main_menu_clearance_job" action="action_view_delivery_order_process" sequence="4"/>
+    <menuitem id="menu_custom_process" name="Custom Process" groups="base.group_user"
+              parent="vkd_clearance_process.main_menu_clearance_job" action="action_view_custom_order" sequence="8"/>
+    <menuitem id="menu_port_process" name="Port Process" groups="base.group_user"
+              parent="vkd_clearance_process.main_menu_clearance_job" action="action_view_port_order_process" sequence="10"/>
+</odoo>

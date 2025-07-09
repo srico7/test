@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="port_bl_view_tree" model="ir.ui.view">
+        <field name="name">port.bl.view.tree</field>
+        <field name="model">port.bl</field>
+        <field name="arch" type="xml">
+            <tree string="Bills of Lading" js_class="button_in_tree" create="0">
+                <field name="bl_number"/>
+                <field name="voyage_name"/>
+                <field name="consignee_name"/>
+                <field name="arrival_at"/>
+                <field name="total_volume"/>
+                <field name="cargo_count"/>
+                <field name="status"/>
+                <field name="invoice_raised"/>
+                <field name="do_exp_date"/>
+                <field name="remaining_quantity"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="port_bl_view_form" model="ir.ui.view">
+        <field name="name">port.bl.view.form</field>
+        <field name="model">port.bl</field>
+        <field name="arch" type="xml">
+            <form string="Bill of Lading">
+                <header>
+                    <button name="fetch_bl_details" type="object" string="Get BL Details" class="btn-success"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="bl_number" placeholder="B/L Number"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="voyage_name"/>
+                            <field name="voyage_id"/>
+                            <field name="bl_voyage_name"/>
+                            <field name="blvoyage"/>
+                            <field name="consignee_name"/>
+                            <field name="formated_name"/>
+                            <field name="mark_nos"/>
+                        </group>
+                        <group>
+                            <field name="cargo_count"/>
+                            <field name="total_volume"/>
+                            <field name="remaining_quantity"/>
+                            <field name="country_of_origin"/>
+                            <field name="broker_id"/>
+                            <field name="is_sea_to_air"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Dates &amp; Status">
+                            <group>
+                                <group>
+                                    <field name="created_at"/>
+                                    <field name="approved_at"/>
+                                    <field name="arrival_at"/>
+                                    <field name="date_received"/>
+                                </group>
+                                <group>
+                                    <field name="do_exp_date"/>
+                                    <field name="eta"/>
+                                    <field name="clearing_date"/>
+                                    <field name="approved"/>
+                                    <field name="status"/>
+                                    <field name="entry_status"/>
+                                    <field name="invoice_raised"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Additional Information">
+                            <group>
+                                <group>
+                                    <field name="file_id"/>
+                                    <field name="profile_version_id"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="port_bl_view_search" model="ir.ui.view">
+        <field name="name">port.bl.view.search</field>
+        <field name="model">port.bl</field>
+        <field name="arch" type="xml">
+            <search string="Search Bills of Lading">
+                <field name="bl_number"/>
+                <field name="voyage_name"/>
+                <field name="consignee_name"/>
+                <field name="mark_nos"/>
+                <separator/>
+                <filter string="Invoiced" name="invoiced" domain="[('invoice_raised', '=', True)]"/>
+                <filter string="Not Invoiced" name="not_invoiced" domain="[('invoice_raised', '=', False)]"/>
+                <filter string="Sea to Air" name="sea_to_air" domain="[('is_sea_to_air', '=', True)]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Voyage" name="group_voyage" domain="[]" context="{'group_by': 'voyage_name'}"/>
+                    <filter string="Consignee" name="group_consignee" domain="[]"
+                            context="{'group_by': 'consignee_name'}"/>
+                    <filter string="Status" name="group_status" domain="[]" context="{'group_by': 'status'}"/>
+                    <filter string="Arrival Date" name="group_arrival" domain="[]"
+                            context="{'group_by': 'arrival_at'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_port_bl" model="ir.actions.act_window">
+        <field name="name">Bills of Lading</field>
+        <field name="res_model">port.bl</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_port_bl"
+              name="BL List"
+              parent="menu_port_api_root"
+              action="action_port_bl"
+              sequence="10"/>
+
+</odoo>

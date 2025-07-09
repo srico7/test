@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data noupdate="1">
+        <record id="ir_sequence_clearance_order" model="ir.sequence">
+           <field name="name">Serial Numbers</field>
+           <field name="code">clearance.order</field>
+           <field name="prefix">CLS/</field>
+           <field name="padding">5</field>
+           <field name="number_next">1</field>
+           <field name="number_increment">1</field>
+           <field name="company_id" eval="False"/>
+       </record>
+
+        <record id="ir_sequence_custom_order" model="ir.sequence">
+           <field name="name">Serial Numbers</field>
+           <field name="code">custom.order</field>
+           <field name="prefix">CO/</field>
+           <field name="padding">5</field>
+           <field name="number_next">1</field>
+           <field name="number_increment">1</field>
+           <field name="company_id" eval="False"/>
+       </record>
+
+        <record id="ir_sequence_delivery_order" model="ir.sequence">
+           <field name="name">Serial Numbers</field>
+           <field name="code">delivery.order</field>
+           <field name="prefix">DO/</field>
+           <field name="padding">5</field>
+           <field name="number_next">1</field>
+           <field name="number_increment">1</field>
+           <field name="company_id" eval="False"/>
+       </record>
+
+        <record id="ir_sequence_port_order" model="ir.sequence">
+           <field name="name">Serial Numbers</field>
+           <field name="code">port.order</field>
+           <field name="prefix">PO/</field>
+           <field name="padding">5</field>
+           <field name="number_next">1</field>
+           <field name="number_increment">1</field>
+           <field name="company_id" eval="False"/>
+       </record>
+
+       <record id="seq_clearance_so" model="ir.sequence">
+            <field name="name">Clearance Sale Order Number</field>
+            <field name="code">clearance.order.sequence</field>
+            <field name="prefix">CBS/%(y)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+</odoo>

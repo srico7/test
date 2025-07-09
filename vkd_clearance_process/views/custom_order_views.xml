@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--custom order view tree-->
+
+    <record id="custom_order_view_tree" model="ir.ui.view">
+        <field name="name">custom.order.view.tree</field>
+        <field name="model">custom.order</field>
+        <field name="arch" type="xml">
+            <tree string="Clearance order">
+                <!--                <field name="company_id" column_invisible="1"/>-->
+                <!--                <field name="is_bl_number" column_invisible="1"/>-->
+                <field name="name" optional="hide"/>
+                <field name="origin"/>
+                <field name="arrived_date"/>
+                <field name="clearance_type"/>
+                <field name="shipment_type"/>
+                <field name="air_shipment_type" column_invisible="context.get('shipment_type', 'sea')"/>
+                <field name="sea_shipment_type" column_invisible="context.get('shipment_type', 'air')"/>
+                <field name="register_form_number"/>
+                <field name="bl_number"/>
+                <field name="custom_state" decoration-success="custom_state == 'paid'"
+                       decoration-primary="custom_state == 'pending_payment'"
+                       decoration-info="custom_state == 'clarification'"
+                       decoration-danger="custom_state == 'assign_to_broker'"
+                       decoration-warning="custom_state == 'new_request'"
+                       decoration-muted="custom_state == 'assign_to_broker_again'" widget="badge"/>
+            </tree>
+        </field>
+    </record>
+
+    <!--custom order view form-->
+    <record id="custom_order_view_form" model="ir.ui.view">
+        <field name="name">custom.order.view.form</field>
+        <field name="model">custom.order</field>
+        <field name="arch" type="xml">
+            <form string="Custom Order">
+                <header>
+<!--                    <field name="purchase_order_count" invisible="1"/>-->
+                    <button name="action_assign_to_broker" id="assign_to_broker" string="Assign to Broker" type="object" data-hotkey="h"
+                            invisible="custom_state != 'new_request'" class="btn-primary"/>
+                    <button name="action_clarification" id="clarification" string="Clarification" type="object" data-hotkey="h"
+                            invisible="custom_state != 'assign_to_broker'" class="btn-primary"/>
+                    <button name="action_assign_to_broker_again" id="assign_to_broker" string="Assign To Broker" type="object" data-hotkey="h"
+                            invisible="custom_state != 'clarification'" class="btn-primary"/>
+                    <button name="action_pending_payment" id="pending_payment" string="Payment" type="object" data-hotkey="h"
+                            invisible="custom_state not in ('assign_to_broker_again')" class="btn-primary"/>
+                    <button name="action_paid" id="paid" string="Paid" type="object" data-hotkey="h"
+                            invisible="custom_state != 'pending_payment'" class="btn-primary"/>
+                    <!--                    <button name="create_purchase_order" id="create_po" string="Purchase Order" type="object" data-hotkey="h"-->
+                    <!--                            invisible="" class="btn-secondary"/>-->
+                    <button name="action_create_vendor_bill" id="create_bill" string="Create Vendor Bill" type="object" data-hotkey="m"
+                            invisible="" class="btn-secondary"/>
+                    <field name="custom_state" widget="statusbar" statusbar_visible="new_request,assign_to_broker,clarification,pending_payment,paid"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button"
+                                string="Sale"
+                                type="object"
+                                icon="fa-pencil-square-o"
+                                name="action_get_custom_sale_order">
+                            <field string="Sale" name="custom_order_count" widget="statinfo"/>
+                        </button>
+                        <!--                        <button class="oe_stat_button"-->
+                        <!--                                string="Sale"-->
+                        <!--                                type="object"-->
+                        <!--                                icon="fa-pencil-square-o"-->
+                        <!--                                invisible="purchase_order_count == 0"-->
+                        <!--                                name="action_get_custom_purchase_order">-->
+                        <!--                            <field string="Purchase" name="purchase_order_count" widget="statinfo"/>-->
+                        <!--                        </button>-->
+                        <button class="oe_stat_button"
+                                string="Vendor Bill"
+                                type="object"
+                                icon="fa-pencil-square-o"
+                                name="action_get_vendor_bill">
+                            <field string="Vendor Bill" name="custom_order_vendor_bill_count" widget="statinfo"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group name="custom_header">
+                        <group name="partner_details">
+                            <field name="partner_id"
+                                   widget="res_partner_many2one"
+                                   placeholder="Type to find a customer..."/>
+                            <field name="company_id"/>
+                            <field name="arrived_date"/>
+                            <field name="clearance_type"/>
+                            <field name="shipment_type"/>
+                            <field name="air_shipment_type"  invisible="shipment_type == 'sea' or shipment_type == False"/>
+                            <field name="sea_shipment_type" invisible="shipment_type == 'air' or shipment_type == False"/>
+                            <field name="register_form_number"/>
+                            <field name="bl_number"/>
+                            <field name="arrival_port"/>
+                        </group>
+                        <group name="agent_details" string="Agent Details">
+                            <field name="agent_id"/>
+                            <field name="agent_email"/>
+                            <field name="agent_contact"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group name="broker_details" string="Broker Details">
+                            <field name="broker_id"/>
+                            <field name="broker_email"/>
+                            <field name="broker_contact"/>
+                        </group>
+                        <group>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Documents" name="clearance_doc" invisible="">
+                            <group>
+                                <group name="doc_details" string="Documents">
+                                    <field name="bl_number"/>
+                                    <field name="bl_number_attachment_ids" widget="many2many_binary"/>
+                                    <field name="packing_list"/>
+                                    <field name="packing_list_attachment_ids" widget="many2many_binary"/>
+                                    <field
+                                            name="commercial_invoice_line"
+                                            widget="section_and_note_one2many"
+                                            mode="tree">
+                                        <tree editable="bottom">
+                                            <field name="commercial_invoice_number"/>
+                                            <field name="number_cls"/>
+                                        </tree>
+                                    </field>
+                                    <field name="commercial_invoice_attachment_ids" widget="many2many_binary"/>
+                                </group>
+                                <group>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="action_view_custom_order" model="ir.actions.act_window">
+        <field name="name">Custom Process</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">custom.order</field>
+        <field name="view_mode">tree,form</field>
+        <!--        <field name="search_view_id" ref="clearance_order_view_search"/>-->
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create new order...!
+            </p>
+        </field>
+    </record>
+
+</odoo>

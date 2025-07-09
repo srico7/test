@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--clearance order view tree-->
+    <record id="clearance_order_view_tree" model="ir.ui.view">
+        <field name="name">clearance.order.view.tree</field>
+        <field name="model">clearance.order</field>
+        <field name="arch" type="xml">
+            <tree string="Clearance order" >
+                <field name="name" optional="hide"/>
+                <field name="origin"/>
+                <field name="container_no"/>
+                <field name="arrival_date"/>
+                <field name="discharge_date"/>
+                <field name="bl_number"/>
+                <field name="number_of_package"/>
+                <field name="volume"/>
+                <field name="weight"/>
+                <field name="loaded_to"/>
+                <field name="container_type"/>
+                <field name="clearance_state" decoration-success="clearance_state == 'complete'"
+                       decoration-info="clearance_state == 'pending_box_return'"
+                       decoration-danger="clearance_state == 'Pending_arrival'"
+                       decoration-warning="clearance_state == 'discharged'" widget="badge"/>
+                 <field name="custom_state" decoration-success="custom_state == 'paid'"
+                       decoration-primary="custom_state == 'pending_payment'"
+                       decoration-info="custom_state == 'clarification'"
+                       decoration-danger="custom_state == 'assign_to_broker'"
+                       decoration-warning="custom_state == 'new_request'" widget="badge"/>
+                 <field name="delivery_state" decoration-success="delivery_state == 'do_approved'"
+                       decoration-primary="delivery_state == 'arrived'"
+                       decoration-info="delivery_state == 'pending_arrival'"
+                       widget="badge"/>
+            </tree>
+        </field>
+    </record>
+
+    <!--clearance job view form-->
+    <record id="clearance_order_view_form" model="ir.ui.view">
+        <field name="name">clearance.order.view.form</field>
+        <field name="model">clearance.order</field>
+        <field name="arch" type="xml">
+            <form string="Clearance Order">
+                <header>
+                    <button name="action_discharged" id="discharge" string="Discharge" type="object" data-hotkey="h"
+                            invisible="clearance_state != 'Pending_arrival'" class="btn-primary"/>
+                    <button name="action_release" id="release" string="Release" type="object" data-hotkey="h"
+                            invisible="clearance_state != 'discharged' or container_type != 'box'" class="btn-primary"/>
+                    <button name="action_return" id="return" string="Return" type="object" data-hotkey="h"
+                            invisible="clearance_state != 'pending_box_return' or container_type != 'box' " class="btn-primary"/>
+                    <button name="action_pending_payment" id="clearance_pending_payment" string="Paid" type="object" data-hotkey="h"
+                            invisible="clearance_state != 'pending_payment'" class="btn-primary"/>
+                    <button name="action_complete" id="complete_co" string="Done" type="object" data-hotkey="m"
+                            invisible="container_type != 'loose' or clearance_state != 'discharged'" class="btn-secondary"/>
+                    <field name="clearance_state" widget="statusbar" statusbar_visible="Pending_arrival,arrived,discharged,pending_box_return,complete"/>
+                    <field name="custom_state" widget="statusbar" invisible="1"/>
+                    <field name="delivery_state" widget="statusbar" invisible="1"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button"
+                                string="Sale"
+                                type="object"
+                                icon="fa-pencil-square-o"
+                                name="action_get_clearance_sale_order">
+                            <field string="Sale" name="clearance_order_count" widget="statinfo"/>
+                        </button>
+<!--                        <button class="oe_stat_button"-->
+<!--                                string="Vendor Bill"-->
+<!--                                type="object"-->
+<!--                                icon="fa-pencil-square-o"-->
+<!--                                name="action_get_vendor_bill">-->
+<!--                            <field string="Vendor Bill" name="clearance_order_vendor_bill_count" widget="statinfo"/>-->
+<!--                        </button>-->
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group name="clearance_header">
+                        <group>
+                            <field name="partner_id"
+                                   widget="res_partner_many2one"
+                                   placeholder="Type to find a customer..."/>
+                            <field name="company_id" colomn_invisoble="True"/>
+                            <field name="create_date"/>
+                            <field name="container_no"/>
+                            <field name="bl_number"/>
+                            <field name="number_of_package"/>
+                            <field name="volume"/>
+                            <field name="weight"/>
+                            <field name="clearance_sale_order_id"/>
+                        </group>
+                        <group>
+                            <field name="arrival_date"/>
+                            <field name="discharge_date"/>
+                            <field name="cleared_date"/>
+                            <field name="container_returned_date"/>
+                            <field name="loaded_to"/>
+                            <field name="container_type"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Vendor Details">
+                            <field name="vendor_id"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_view_clearance_order" model="ir.actions.act_window">
+        <field name="name">Clearance Process</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">clearance.order</field>
+        <field name="view_mode">tree,form</field>
+        <!--        <field name="search_view_id" ref="clearance_order_view_search"/>-->
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create new order...!
+            </p>
+        </field>
+    </record>
+</odoo>

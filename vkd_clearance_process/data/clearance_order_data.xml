@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <!--    Creating Duty service product-->
+        <record model="product.product" id="clearance_service_product_duty">
+            <field name="name">Duty Service</field>
+            <field name="type">service</field>
+        </record>
+
+        <!--    Creating Duty service product-->
+        <record model="product.product" id="custom_document_processing">
+            <field name="name">Customs Document processing charges</field>
+            <field name="type">service</field>
+            <field name="lst_price">100.0</field>
+        </record>
+
+        <record model="product.product" id="custom_declaration">
+            <field name="name">Customs Form Declaration</field>
+            <field name="type">service</field>
+            <field name="lst_price">100.0</field>
+        </record>
+
+        <!--    Creating clearance service product-->
+        <record model="product.product" id="clearance_service_product">
+            <field name="name">Clearance Services</field>
+            <field name="type">service</field>
+            <field name="lst_price">100.0</field>
+        </record>
+
+        <!--    Creating Handling and Wharefage Charge service product-->
+        <record model="product.product" id="clearance_service_product_wharefage_40">
+            <field name="name">Handling and Wharefage Charges - 40'</field>
+            <field name="type">service</field>
+            <field name="lst_price">100.0</field>
+        </record>
+
+        <record model="product.product" id="clearance_service_product_wharefage_20">
+            <field name="name">Handling and Wharefage Charges - 20'</field>
+            <field name="type">service</field>
+            <field name="lst_price">100.0</field>
+        </record>
+
+        <!--    Creating Express charge service product-->
+        <record model="product.product" id="clearance_service_product_express">
+            <field name="name">Express Charges</field>
+            <field name="type">service</field>
+            <field name="lst_price">100.0</field>
+        </record>
+
+        <!--    Creating Storage Charge service product-->
+        <record model="product.product" id="clearance_service_product_storage">
+            <field name="name">Storage Charges</field>
+            <field name="type">service</field>
+            <field name="lst_price">100.0</field>
+        </record>
+
+        <!--    Creating Re Shifting Charge service product-->
+        <record model="product.product" id="clearance_service_product_re_shifting">
+            <field name="name">Re Shifting Charges</field>
+            <field name="type">service</field>
+            <field name="lst_price">100.0</field>
+        </record>
+
+        <!--    Creating Re Shifting Charge service product-->
+        <record model="product.product" id="clearance_service_product_shifting_40">
+            <field name="name">Shifting Charges - 40'</field>
+            <field name="type">service</field>
+            <field name="lst_price">100.0</field>
+        </record>
+
+        <record model="product.product" id="clearance_service_product_shifting_20">
+            <field name="name">Shifting Charges - 20'</field>
+            <field name="type">service</field>
+            <field name="lst_price">100.0</field>
+        </record>
+
+        <!--    Creating Empty container handling charge service product-->
+        <record model="product.product" id="clearance_service_product_container_handling_40">
+            <field name="name">Empty container handling charge - 40'</field>
+            <field name="type">service</field>
+            <field name="lst_price">100.0</field>
+        </record>
+
+        <record model="product.product" id="clearance_service_product_container_handling_20">
+            <field name="name">Empty container handling charge - 20'</field>
+            <field name="type">service</field>
+            <field name="lst_price">100.0</field>
+        </record>
+
+        <!--    Creating Custom charge service product-->
+        <record model="product.product" id="clearance_service_product">
+            <field name="name">Custom charge</field>
+            <field name="type">service</field>
+            <field name="lst_price">100.0</field>
+        </record>
+
+        <!--    Creating Agency charge service product-->
+        <record model="product.product" id="clearance_service_product">
+            <field name="name">Agency charge</field>
+            <field name="type">service</field>
+            <field name="lst_price">100.0</field>
+        </record>
+
+        <!--    Creating Duty service product-->
+        <record model="product.product" id="clearance_container_20">
+            <field name="name">Container - 20'</field>
+            <field name="type">service</field>
+            <field name="default_code">20</field>
+            <field name="list_price">0.0</field>
+            <field name="sale_ok">False</field>
+            <field name="purchase_ok">False</field>
+        </record>
+
+        <record model="product.product" id="clearance_container_40">
+            <field name="name">Container - 40'</field>
+            <field name="type">service</field>
+            <field name="default_code">40</field>
+            <field name="list_price">0.0</field>
+            <field name="sale_ok">False</field>
+            <field name="purchase_ok">False</field>
+        </record>
+    </data>
+</odoo>

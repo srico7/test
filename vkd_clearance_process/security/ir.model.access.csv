@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_clearance_order,clearance_order,model_clearance_order,,1,1,1,1
+access_delivery_order,delivery_order,model_delivery_order,,1,1,1,1
+access_custom_order,custom_order,model_custom_order,,1,1,1,1
+access_custom_order_detail,access_custom_order_detail,model_custom_order_detail,,1,1,1,1
+access_commercial_invoice_line,access_commercial_invoice_line,model_commercial_invoice_line,,1,1,1,1
+access_advanced_payment,access_advanced_payment,model_advanced_payment,,1,1,1,1
+access_port_order,access_port_order,model_port_order,,1,1,1,1
+access_clarification_wizard,access_clarification_wizard,model_clarification_wizard,,1,1,1,1

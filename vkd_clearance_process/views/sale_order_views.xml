@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="clearance_order_form_view" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit_vkd_clearance_process</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <field name="sale_order_template_id" position="after">
+                <field name="is_clearance" invisible="not is_clearance_visible"/>
+                <field name="is_clearance_visible" invisible="1"/>
+                <field name="is_processed" invisible="1"/>
+                <field name="is_get_advanced_payment" invisible="1"/>
+            </field>
+            <field name="payment_term_id" position="after">
+                <field name="bl_number" invisible="not is_clearance"/>
+                <field name="arrived_date" invisible="not is_clearance"/>
+            </field>
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button type="object" name="action_get_delevrey_order" class="oe_stat_button" icon="fa-puzzle-piece" invisible="delivery_order_count == 0">
+                    <field name="delivery_order_count"
+                           widget="statinfo"
+                           string="DO"
+                    />
+                </button>
+                <button type="object" name="action_get_clearance_order" class="oe_stat_button" icon="fa-puzzle-piece" invisible="clearance_order_count == 0">
+                    <field name="clearance_order_count"
+                           widget="statinfo"
+                           string="Clearance"
+                    />
+                </button>
+                <button type="object" name="action_get_custom_order" class="oe_stat_button" icon="fa-puzzle-piece" invisible="custom_order_count == 0">
+                    <field name="custom_order_count"
+                           widget="statinfo"
+                           string="Custom"
+                    />
+                </button>
+                <button type="object" name="action_get_port_order" class="oe_stat_button" icon="fa-puzzle-piece" invisible="port_order_count == 0">
+                    <field name="port_order_count"
+                           widget="statinfo"
+                           string="Port"
+                    />
+                </button>
+                <button type="object" name="action_get_advanced_payment" class="oe_stat_button" icon="fa-list" invisible="advanced_order_count == 0">
+                    <field name="advanced_order_count"
+                           widget="statinfo"
+                           string="Advanced Payment"
+                    />
+                </button>
+            </xpath>
+            <xpath expr="//notebook/page[@name='order_lines']" position="after">
+                <page string="Custom Process" name="custom_process" invisible="is_clearance != True">
+                    <group>
+                        <group name="shipment_details" string="Shipment Details">
+                            <field name="clearance_type"/>
+                            <field name="shipment_type"/>
+                            <field name="air_shipment_type"  invisible="shipment_type == 'sea' or shipment_type == False"/>
+                            <field name="sea_shipment_type" invisible="shipment_type == 'air' or shipment_type == False"/>
+                            <field name="register_form_number"/>
+                            <field name="arrived_date"/>
+                        </group>
+                        <group name="agent_details" string="Agent Details">
+                            <field name="agent_id"/>
+                            <field name="agent_email"/>
+                            <field name="agent_contact"/>
+                        </group>
+                    </group>
+                </page>
+                <page string="Documents" name="clearance_doc" invisible="is_clearance != True">
+                    <group>
+                        <group name="doc_details" string="Documents">
+                            <field name="bl_number"/>
+                            <field name="bl_number_attachment_ids" widget="many2many_binary"/>
+                            <field name="packing_list"/>
+                            <field name="packing_list_attachment_ids" widget="many2many_binary"/>
+                            <field
+                                    name="commercial_invoice_line"
+                                    widget="section_and_note_one2many"
+                                    mode="tree">
+                                <tree editable="bottom">
+                                    <field name="commercial_invoice_number"/>
+                                    <field name="number_cls"/>
+                                </tree>
+                            </field>
+                            <field name="commercial_invoice_attachment_ids" widget="many2many_binary"/>
+                        </group>
+                        <group>
+                        </group>
+                    </group>
+                </page>
+                <page string="Cargo Details" name="cargo_details" invisible="is_clearance != True">
+                    <group>
+                        <field name="cargo_detail" string="Cargo Details"/>
+                    </group>
+                </page>
+            </xpath>
+            <xpath expr="//form/header/button[@name='action_preview_sale_order']" position="after">
+                <button name="action_process_creation" string="Job Register" type="object" class="btn-secondary" invisible="not is_clearance or is_processed"/>
+                <button name="action_open_advanced_payment_wizard" string="Advanced Payment" type="object" class="btn-secondary" invisible="not is_clearance or is_get_advanced_payment != False"/>
+            </xpath>
+            <xpath expr="//notebook/page[@name='order_lines']/field/tree/field[@name='product_uom_qty']" position="after">
+                <field name="is_clearance" column_invisible="True"/>
+                <field name="container_no" column_invisible="not parent.is_clearance" style="width: 200px !important;"/>
+                <field name="container_type" column_invisible="not parent.is_clearance" style="width: 150px;"/>
+                <field name="clearance_mode" column_invisible="not parent.is_clearance" style="width: 150px;"/>
+                <field name="clearance_location" column_invisible="not parent.is_clearance" style="width: 150px;"/>
+                <field name="number_of_package" column_invisible="not parent.is_clearance" style="width: 150px;"/>
+                <field name="volume" column_invisible="not parent.is_clearance" style="width: 150px;"/>
+                <field name="weight" column_invisible="not parent.is_clearance" style="width: 150px;"/>
+<!--                <field name="arrival_date" column_invisible="not parent.is_clearance" style="width: 150px;"/>-->
+                <field name="cleared_date" column_invisible="not parent.is_clearance" style="width: 150px;"/>
+                <field name="discharge_date" column_invisible="not parent.is_clearance" style="width: 150px;"/>
+                <field name="container_returned_date" column_invisible="not parent.is_clearance" style="width: 150px;"/>
+                <field name="loaded_to" column_invisible="not parent.is_clearance" style="width: 150px;"/>
+            </xpath>
+<!--            <xpath expr="//notebook/page[@name='order_lines']/field[@name='order_line']" position="attributes">-->
+<!--                <attribute name="widget">one2many</attribute>-->
+<!--            </xpath>-->
+        </field>
+    </record>
+
+    <record id="action_view_clearance_sale_order" model="ir.actions.act_window">
+        <field name="name">Clearance Sale Orders</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sale.order</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('is_clearance', '=', True)]</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create new order...!
+            </p>
+        </field>
+    </record>
+
+    <record id="action_purchase_order" model="ir.actions.act_window">
+        <field name="name">Purchase Order</field>
+        <field name="res_model">purchase.order</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="purchase.purchase_order_form"/>
+        <field name="target">new</field>
+        <field name="context">{
+            'default_sale_order_id': active_id,
+            }
+        </field>
+    </record>
+
+</odoo>

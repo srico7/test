@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_port_api_config,access_port_api_config,model_port_api_config,base.group_user,1,1,1,1
+access_port_bl,access_port_bl,model_port_bl,base.group_user,1,1,1,1
+access_port_bl_details,access_port_bl_details,model_port_bl_details,base.group_user,1,1,1,1
+access_port_bl_cargo,access_port_bl_cargo,model_port_bl_cargo,base.group_user,1,1,1,1
+access_port_gate_pass,access_port_gate_pass,model_port_gate_pass,base.group_user,1,1,1,1
+access_bl_search,access_bl_search,model_bl_search,base.group_user,1,1,1,1
+

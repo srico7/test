@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="bl_search_view_form" model="ir.ui.view">
+        <field name="name">bl.search.view.form</field>
+        <field name="model">bl.search</field>
+        <field name="arch" type="xml">
+            <form string="Bills of Lading">
+                <group>
+                    <field name="bl_number"/>
+                    <field name="api_config_id"/>
+                </group>
+                <footer>
+                    <button string="Search BL Number" type="object" name="fetch_bl_by_search" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="action_bl_search" model="ir.actions.act_window">
+        <field name="name">Search BL Number</field>
+        <field name="res_model">bl.search</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>
