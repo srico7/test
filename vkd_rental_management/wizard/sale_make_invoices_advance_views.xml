@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_sale_advance_payment_inv" model="ir.ui.view">
+        <field name="name">Invoice Orders</field>
+        <field name="model">sale.advance.payment.inv</field>
+        <field name="inherit_id" ref="sale.view_sale_advance_payment_inv"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@invisible='not has_down_payments']" position="after">
+                <div>
+                    <label for="entry_start_date" class="oe_inline"/>
+                    <field name="entry_start_date"/>
+                </div>
+
+                <div>
+                    <label for="entry_end_date" class="oe_inline"/>
+                    <field name="entry_end_date"/>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

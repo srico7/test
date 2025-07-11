@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_move_form" model="ir.ui.view">
+        <field name="name">account.move.view.form.inherit.vkd_readonly_unit_price</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet/field[@name='journal_id']"
+                   position="before">
+                 <field name="is_rental_invoice" invisible="True"/>
+            </xpath>
+
+            <xpath expr="//field[@name='invoice_line_ids']//tree//field[@name='quantity']"
+                   position="before">
+                <field name="secondary_product_uom_qty"/>
+                <field name="secondry_product_uom"/>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page[@id='invoice_tab']/field/tree/field[@name='product_uom_id'][1]" position="attributes">
+                <attribute name="column_invisible">parent.is_rental_invoice</attribute>
+            </xpath>
+            <xpath expr="//field[@name='invoice_line_ids']//tree//field[@name='quantity']" position="attributes">
+                <attribute name="column_invisible">parent.is_rental_invoice</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

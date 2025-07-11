@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <!--    Creating Duty service product-->
+        <record model="product.product" id="rental_service_product_labour_charges_hour">
+            <field name="name">Rental Charges - Hourly</field>
+            <field name="type">service</field>
+             <field name="default_code">RENT_001</field>
+            <field name="uom_id" ref="uom.product_uom_hour"/>
+            <field name="uom_po_id" ref="uom.product_uom_hour"/>
+        </record>
+
+        <record model="product.product" id="rental_service_product_labour_charges_daily">
+            <field name="name">Rental Charges - Daily</field>
+            <field name="type">service</field>
+             <field name="default_code">RENT_004</field>
+            <field name="uom_id" ref="uom.product_uom_hour"/>
+            <field name="uom_po_id" ref="uom.product_uom_hour"/>
+        </record>
+
+        <record model="product.product" id="rental_service_product_labour_charges_day">
+            <field name="name">Rental Charges - Monthly</field>
+            <field name="type">service</field>
+             <field name="default_code">RENT_002</field>
+            <field name="uom_id" ref="uom.product_uom_day"/>
+            <field name="uom_po_id" ref="uom.product_uom_day"/>
+        </record>
+
+        <record model="product.product" id="rental_service_product_labour_charges_year">
+            <field name="name">Rental Charges - Yearly</field>
+            <field name="type">service</field>
+             <field name="default_code">RENT_003</field>
+            <field name="uom_id" ref="uom.product_uom_day"/>
+            <field name="uom_po_id" ref="uom.product_uom_day"/>
+        </record>
+    </data>
+</odoo>

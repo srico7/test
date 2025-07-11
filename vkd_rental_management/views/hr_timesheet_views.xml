@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_task_form2" model="ir.ui.view">
+        <field name="name">project.task.view.form.inherit.vkd_rental_management</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='stage_id']" position='before'>
+                <button name="action_create_clearance_entry" id="clerance_entry" string="Create Clearance" type="object" data-hotkey="h"
+                        class="btn-primary"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

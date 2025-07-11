@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="action_po_form" model="ir.actions.act_window">
+        <field name="name">Purchase Order</field>
+        <field name="res_model">purchase.order</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="purchase.purchase_order_form"/>
+        <field name="target">new</field>
+        <field name="context">{
+            'default_sale_order_id': active_id,
+            }
+        </field>
+    </record>
+
+    <record id="rental_order_form_view" model="ir.ui.view">
+        <field name="name">rental.order.form.inherit_vkd_rental_management</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale_renting.rental_order_primary_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <field name="is_rental_state_check" invisible="1"/>
+                <field name="is_rental_order_check" invisible="1"/>
+            </xpath>
+            <field name="payment_term_id" position="after">
+                <field name="rental_terms" invisible="not is_rental_order"/>
+                <field name="has_breakdown_lines" invisible="1"/>
+            </field>
+            <xpath expr="//form/sheet/notebook/page[@name='other_information']" position="after">
+                <page string="Advanced Payment" name="advanced_payment_line" >
+                    <field
+                            name="advanced_payment_line_ids"
+                            widget="section_and_note_one2many"
+                            mode="tree"
+                            readonly="state in ['posted']"
+                            context="{'default_sale_order_id': active_id, 'default_partner_id': partner_id}">
+                        <tree>
+                            <field name="company_id" column_invisible="True"/>
+                            <field name="name"/>
+                            <field name="partner_id"/>
+                            <field name="sale_order_id" column_invisible="1"/>
+                            <field name="payment_type"/>
+                            <field name="note"/>
+                            <field name="deposit_amount"/>
+                            <field name="date"/>
+                            <field name="currency_id"/>
+                            <field name="payment_method_line_id"/>
+                            <field name="state"/>
+                        </tree>
+                    </field>
+                </page>
+                <page string="Attachments" name="rental_attachments" invisible="not is_rental_order">
+                    <field
+                            name="attachment_detail_sale_line"
+                            widget="section_and_note_one2many"
+                            invisible=""
+                            mode="tree">
+                        <tree editable="bottom">
+                            <field name="attachment_name"/>
+                            <field name="attachment_type" column_invisible="True"/>
+                            <field name="attachment_file" widget="binary" attachment="True" filename="attachment_name"/>
+                        </tree>
+                    </field>
+                </page>
+                <page string="Rental Extend" name="rental_extend" invisible="not is_rental_order" >
+                    <field
+                            name="rental_period_history_ids"
+                            widget="section_and_note_one2many"
+                            invisible=""
+                            mode="tree">
+                        <tree editable="bottom">
+                            <field name="start_date"/>
+                            <field name="return_date"/>
+                            <field name="reason"/>
+                        </tree>
+                    </field>
+                </page>
+                <page name="rental_sale_po" string="Purchase Orders" invisible="is_rental_order != True">
+                    <field name="purchase_order_ids" widget="one2many" options="{'no_create': True, 'readonly': True}" readonly="1"/>
+                </page>
+            </xpath>
+            <xpath expr="//form/header/button[@name='action_preview_sale_order']" position="after">
+                <button name="action_rental_break_down" string="Break Down" type="object" class="btn-secondary" invisible="has_breakdown_lines == True or state != 'sale' or rental_status != 'return'"/>
+                <button name="action_extend_rental" string="Extend Rental" type="object" invisible="not is_rental_order or state != 'sale' or rental_status != 'return'"
+                        class="btn-secondary"/>
+                <button name="action_continue" string="Continue" type="object" invisible="not is_rental_order or rental_status != 'breakdown'"
+                        class="btn-secondary"/>
+                <button type="action" name="%(vkd_rental_management.action_po_form)d" string="Replenish"
+                        invisible="is_rental_order != True or state != 'sale' or rental_status != 'return'"/>
+            </xpath>
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button type="object" name="action_get_rental_project" class="oe_stat_button" icon="fa-puzzle-piece" invisible="rental_project_count == 0">
+                    <field name="rental_project_count"
+                           widget="statinfo"
+                           string="Projects"
+                           invisible="rental_project_count == 0"/>
+                </button>
+                <button type="object" name="action_get_rental_task" class="oe_stat_button" icon="fa-tasks" invisible="rental_tasks_count == 0">
+                    <field name="rental_tasks_count" widget="statinfo" string="Tasks" />
+                </button>
+                <button type="object" name="action_get_rental_breakdown_orders" class="oe_stat_button" icon="fa-tasks" invisible="rental_replacement_order_count == 0">
+                    <field name="rental_replacement_order_count" widget="statinfo" string="Replacement" />
+                </button>
+            </xpath>
+            <xpath expr="//div[@name='button_box']" position="after">
+                <div class="badge rounded-pill text-bg-danger float-end fs-6 border-0"
+                     invisible="not has_rented_products or state != 'sale' or rental_status != 'breakdown'">break-down</div>
+            </xpath>
+            <xpath expr="//button[@name='action_quotation_send']" position="attributes">
+                <attribute name="invisible">state in('draft', 'waiting_approve')</attribute>
+            </xpath>
+            <xpath expr="//button[@id='send_by_email']" position="attributes">
+                <attribute name="invisible">is_rental_order</attribute>
+            </xpath>
+            <xpath expr="//notebook/page[@name='order_lines']/field/tree/field[@name='product_uom_qty']" position="before">
+                <field name="secondary_product_uom_qty"/>
+                <field name="secondry_product_uom"/>
+            </xpath>
+            <xpath expr="//notebook/page[@name='order_lines']/field/tree/field[@name='product_uom_qty']" position="attributes">
+                <attribute name="column_invisible">parent.is_rental_order</attribute>
+            </xpath>
+            <xpath expr="//notebook/page[@name='order_lines']/field/tree/field[@name='product_uom'][2]" position="attributes">
+                <attribute name="column_invisible">parent.is_rental_order</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="advanced_payment_line_form_view" model="ir.ui.view">
+        <field name="name">advanced.payment.line.form.view</field>
+        <field name="model">advanced.payment.line</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="available_payment_method_line_ids" invisible="1"/>
+                    <field name="sale_order_id" invisible="1"/>
+                    <field name="partner_id" invisible="1"/>
+                    <button name="action_confirm_advanced_payment" id="advanced_payment" string="Confirm" type="object" data-hotkey="h"
+                            invisible="state != 'draft'" class="btn-primary"/>
+                    <button name="action_cancel" id="adv_payment" string="Cancel" type="object" data-hotkey="h"
+                            invisible="state != 'draft'" class="btn-primary"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,posted"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="partner_id"/>
+                            <field name="payment_type" widget="radio"/>
+                            <field name="payment_journal_id"/>
+                        </group>
+                        <group>
+                            <field name="deposit_amount"/>
+                            <field name="date"/>
+                            <field name="currency_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="note"/>
+                        <field name="payment_method_line_id"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

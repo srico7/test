@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_rental_job,access_rental_job,model_rental_job,base.group_user,1,1,1,1
+access_rental_attachment_line,access_rental_attachment_line,model_rental_attachment_line,base.group_user,1,1,1,1
+access_rental_scope_line,access_rental_scope_line,model_rental_scope_line,base.group_user,1,1,1,1
+access_rental_order_line,access_rental_order_line,model_rental_order_line,base.group_user,1,1,1,1
+access_advanced_payment_line,access_advanced_payment_line,model_advanced_payment_line,base.group_user,1,1,1,1
+access_rental_extend_history,access_rental_extend_history,model_rental_extend_history,base.group_user,1,1,1,1
+access_rental_extend_wizard,access_rental_extend_wizard,model_rental_extend_wizard,base.group_user,1,1,1,1
+access_rental_breakdown_wizard,access_rental_breakdown_wizard,model_rental_breakdown_wizard,base.group_user,1,1,1,1

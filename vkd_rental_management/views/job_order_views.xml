@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--Rental job view tree-->
+
+    <record id="rental_job_view_tree" model="ir.ui.view">
+        <field name="name">rental.job.view.tree</field>
+        <field name="model">rental.job</field>
+        <field name="arch" type="xml">
+            <tree string="rental Job">
+                <field name="company_id" column_invisible="1"/>
+                <field name="name"/>
+                <field name="create_date"/>
+                <field name="rental_type"/>
+            </tree>
+        </field>
+    </record>
+
+    <!--Rental job view form-->
+
+    <record id="rental_job_view_form" model="ir.ui.view">
+        <field name="name">rental.job.view.form</field>
+        <field name="model">rental.job</field>
+        <field name="arch" type="xml">
+            <form string="Rental Job Order">
+                <header>
+                    <field name="company_id" invisible="1"/>
+                    <button name="action_send_approval" id="send_approval" string="Sent to approval" type="object" data-hotkey="h"
+                            invisible="state != 'draft'" class="btn-primary"/>
+                    <button name="action_confirm_rental_order" id="create_quote" string="Confirm" type="object" data-hotkey="h"
+                            invisible="state != 'approve'" class="btn-primary"/>
+                    <button name="action_approve" id="approve_rental" string="Approve" type="object" data-hotkey="h" groups="vkd_rental_management.group_rental_manager"
+                            invisible="state != 'pending_approval'" class="btn-primary"/>
+                    <button name="action_cancel" id="cancel" string="Cancel" type="object" data-hotkey="h"
+                            invisible="state != 'cancel'" class="btn-primary"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirm"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" invisible="rental_order_count == 0"
+                                string="Rental"
+                                type="object"
+                                icon="fa-pencil-square-o"
+                                name="action_get_rental_sale_order">
+                            <field string="Rental" name="rental_order_count" widget="statinfo"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group name="rental_header">
+                        <group name="partner_details">
+                            <field name="partner_id"
+                                   widget="res_partner_many2one"
+                                   placeholder="Type to find a customer..."/>
+                            <field name="create_date"/>
+                            <field name="rental_type"/>
+                            <field name="company_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Rental Scope" name="rental_scope">
+                            <field
+                                    name="rental_scope_line"
+                                    widget="section_and_note_one2many"
+                                    mode="tree">
+                                <tree editable="bottom">
+                                    <field name="name"/>
+                                    <field name="description"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Order Line" name="rental_order_line" invisible="state not in ('approve', 'confirm')">
+                            <field
+                                    name="rental_order_line"
+                                    widget="section_and_note_one2many"
+                                    mode="tree">
+                                <tree editable="bottom">
+                                    <field name="company_id" column_invisible="True"/>
+                                    <field name="product_id"/>
+                                    <field name="name"/>
+                                    <field name="product_uom_qty"/>
+                                    <field name="product_uom"/>
+                                    <field name="price_unit"/>
+                                </tree>
+                            </field>
+                        </page>
+<!--                        <page string="Attachments" name="rental_attachments">-->
+<!--                            <field-->
+<!--                                    name="attachment_detail_line"-->
+<!--                                    widget="section_and_note_one2many"-->
+<!--                                    mode="tree">-->
+<!--                                <tree editable="bottom">-->
+<!--                                    <field name="attachment_name"/>-->
+<!--                                    <field name="attachment_type" column_invisible="True"/>-->
+<!--                                    <field name="attachment_file" widget="binary" attachment="True" filename="attachment_name"/>-->
+<!--                                </tree>-->
+<!--                            </field>-->
+<!--                        </page>-->
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_view_rental_job" model="ir.actions.act_window">
+        <field name="name">rental job</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">rental.job</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create New Rental job...!
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_rental_job_order" name="Rental Job" groups="base.group_user"
+              parent="sale_renting.rental_menu_root" action="action_view_rental_job" sequence="1"/>
+</odoo>

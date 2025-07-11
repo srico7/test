@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_rental_breakdown_wizard_form" model="ir.ui.view">
+        <field name="name">rental.breakdown.wizard.form</field>
+        <field name="model">rental.breakdown.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Rental Breakdown">
+                <group>
+                    <field name="breakdown_type" widget="radio"/>
+                </group>
+                <footer>
+                    <button string="Confirm" type="object" name="confirm_action" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>
