@@ -1,0 +1,29 @@
+<odoo>
+    <data>
+
+        <record id="custom_sale_invoice_id" model="ir.ui.view">
+            <field name="name">account.invoice.form</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='invoice_user_id']" position="after">
+                        <field name="custom_sale_id"/>
+                        <field name="custom_sale_pricelist_id"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="custom_sale_invoice_id_search_view" model="ir.ui.view">
+            <field name="name">account.invoice.search</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_account_move_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//search" position="inside">
+                    <field name="custom_sale_id"/>
+                    <filter string="Sale order" name="custom_sale_id" context="{'group_by':'custom_sale_id'}"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>
